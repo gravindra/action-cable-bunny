@@ -12,12 +12,12 @@ module ActionCable
       def initialize(*)
         super
         @listener = nil
-        @connection = ::Bunny.new(::AMQP_CONFIG).tap(&:start)
+        @connection = ::Bunny.new(ENV["CLOUDAMQP_URL"]).tap(&:start)
         @channel = @connection.create_channel
       end
 
       def broadcast(channel, payload)
-        exchange = @channel.fanout(channel_identifier(channel), auto_delete: true)
+        exchange = @channel.fanout(channel_identifier(channel), auto_delete: false)
         exchange.publish(payload.to_json)
       end
 
@@ -71,7 +71,7 @@ module ActionCable
             @queue.push([:listen, channel, on_success])
           end
 
-          def remove_channel(channel, on_success)
+          def remove_channel(channel, on_success=nil)
             @queue.push([:unlisten, channel, on_success])
           end
 
@@ -91,15 +91,16 @@ module ActionCable
             end
 
             def consumer_subscribe(channel)
-              channel_name = "#{channel}.#{SecureRandom.urlsafe_base64}"
-              exchange = @adapter.channel.fanout(channel, auto_delete: true)
+              channel_name = "#{channel}"
+              exchange = @adapter.channel.fanout(channel, auto_delete: false)
 
               queue = @adapter
                       .channel
-                      .queue(channel_name, auto_delete: true)
+                      .queue(channel_name, :durable => true, :auto_delete => false)
                       .bind(exchange)
-              @consumer = queue.subscribe do |_d, _m, p|
+              @consumer = queue.subscribe(:manual_ack => true) do |_d, _m, p|
                 broadcast(channel, p)
+                @adapter.channel.ack(_d.delivery_tag)
               end
             end
 
