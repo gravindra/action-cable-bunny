@@ -18,7 +18,7 @@ module ActionCable
 
       def broadcast(channel, payload)
         exchange = @channel.fanout(channel_identifier(channel), auto_delete: false)
-        exchange.publish(payload.to_json)
+        exchange.publish(payload)
       end
 
       def subscribe(channel, callback, success_callback = nil)
