@@ -17,7 +17,7 @@ module ActionCable
       end
 
       def broadcast(channel, payload)
-        exchange = @channel.fanout(channel_identifier(channel), auto_delete: false)
+        exchange = @channel.fanout(channel_identifier(channel), auto_delete: true)
         exchange.publish(payload)
       end
 
@@ -92,7 +92,7 @@ module ActionCable
 
             def consumer_subscribe(channel)
               channel_name = "#{channel}"
-              exchange = @adapter.channel.fanout(channel, auto_delete: false)
+              exchange = @adapter.channel.fanout(channel, auto_delete: true)
 
               queue = @adapter
                       .channel
