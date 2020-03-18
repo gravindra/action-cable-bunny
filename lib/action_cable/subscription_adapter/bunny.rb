@@ -13,7 +13,10 @@ module ActionCable
         super
         @listener = nil
         @connection = ::Bunny.new(ENV["CLOUDAMQP_URL"]).tap(&:start)
-        @channel = @connection.create_channel
+        @channel ||= ConnectionPool.new do
+          @connection.create_channel
+        end
+        # @channel = @connection.create_channel
       end
 
       def broadcast(channel, payload)
