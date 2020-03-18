@@ -38,7 +38,6 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "actioncable", "~> 5.2.3"
   spec.add_dependency "bunny", "~> 2.1"
-  spec.add_dependency "connection_pool", "~> 2.2.2"
 
   spec.add_development_dependency "bundler", "~> 2.0"
   spec.add_development_dependency "rake", "~> 10.0"

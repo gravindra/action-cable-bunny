@@ -2,7 +2,6 @@
 
 require "bunny"
 require "securerandom"
-require "connection_pool"
 module ActionCable
   module SubscriptionAdapter
     class Bunny < Base # :nodoc:
@@ -13,11 +12,8 @@ module ActionCable
       def initialize(*)
         super
         @listener = nil
-        @connection = ::Bunny.new(ENV["CLOUDAMQP_URL"]).tap(&:start)
-        @channel ||= ConnectionPool.new do
-          @connection.create_channel
-        end
-        # @channel = @connection.create_channel
+        @connection = ::Bunny.new(ENV["CLOUDAMQP_URL"], {threaded: false}).tap(&:start)
+        @channel = @connection.create_channel
       end
 
       def broadcast(channel, payload)
