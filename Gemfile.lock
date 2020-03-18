@@ -4,6 +4,7 @@ PATH
     action-cable-bunny (0.1.0)
       actioncable (~> 5.2.3)
       bunny (~> 2.1)
+      connection_pool (~> 2.2.2)
 
 GEM
   remote: https://rubygems.org/
@@ -53,7 +54,7 @@ GEM
     arel (9.0.0)
     ast (2.4.0)
     builder (3.2.3)
-    bunny (2.14.2)
+    bunny (2.14.4)
       amq-protocol (~> 2.3, >= 2.3.0)
     byebug (11.0.1)
     concurrent-ruby (1.1.5)
@@ -157,7 +158,6 @@ DEPENDENCIES
   action-cable-bunny!
   bundler (~> 2.0)
   byebug
-  connection_pool
   rails (~> 5.2)
   rake (~> 10.0)
   rspec (~> 3.0)

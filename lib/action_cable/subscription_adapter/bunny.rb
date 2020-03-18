@@ -2,6 +2,7 @@
 
 require "bunny"
 require "securerandom"
+require "connection_pool"
 module ActionCable
   module SubscriptionAdapter
     class Bunny < Base # :nodoc:
