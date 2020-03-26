@@ -104,7 +104,7 @@ module ActionCable
 
               queue = @adapter
                       .channel
-                      .queue(channel_name, :durable => true, :auto_delete => false)
+                      .queue(channel_name, :durable => false, :auto_delete => true)
                       .bind(exchange)
               @consumer = queue.subscribe(:manual_ack => true) do |_d, _m, p|
                 broadcast(channel, p)
