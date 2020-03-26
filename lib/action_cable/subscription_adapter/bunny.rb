@@ -37,7 +37,7 @@ module ActionCable
 
       def conn_channel(connection)
         @channel_pool ||= ConnectionPool::Wrapper.new do
-          connection.create_channel
+          connection.create_channel(nil, 10)
         end
       end
 
